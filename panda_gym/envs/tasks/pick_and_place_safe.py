@@ -213,4 +213,9 @@ class PickAndPlaceSafe(Task):
         if self.reward_type == "sparse":
             return -np.array(d > self.distance_threshold, dtype=np.float64)
         else:
-            return -d
+            if d <= self.distance_threshold:
+                return 5.0  # Additional positive reward for success
+            else:
+                return -d
+
+            # return -d
