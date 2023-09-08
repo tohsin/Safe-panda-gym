@@ -1,4 +1,4 @@
-from typing import Any, Dict, Union
+from typing import Any, Dict
 
 import numpy as np
 
@@ -23,7 +23,6 @@ class Reach(Task):
         self.goal_range_high = np.array([goal_range / 2, goal_range / 2, goal_range])
         with self.sim.no_rendering():
             self._create_scene()
-            self.sim.place_visualizer(target_position=np.zeros(3), distance=0.9, yaw=45, pitch=-30)
 
     def _create_scene(self) -> None:
         self.sim.create_plane(z_offset=-0.4)
@@ -53,13 +52,13 @@ class Reach(Task):
         goal = self.np_random.uniform(self.goal_range_low, self.goal_range_high)
         return goal
 
-    def is_success(self, achieved_goal: np.ndarray, desired_goal: np.ndarray) -> Union[np.ndarray, float]:
+    def is_success(self, achieved_goal: np.ndarray, desired_goal: np.ndarray) -> np.ndarray:
         d = distance(achieved_goal, desired_goal)
-        return np.array(d < self.distance_threshold, dtype=np.float64)
+        return np.array(d < self.distance_threshold, dtype=bool)
 
-    def compute_reward(self, achieved_goal, desired_goal, info: Dict[str, Any]) -> Union[np.ndarray, float]:
+    def compute_reward(self, achieved_goal, desired_goal, info: Dict[str, Any]) -> np.ndarray:
         d = distance(achieved_goal, desired_goal)
         if self.reward_type == "sparse":
-            return -np.array(d > self.distance_threshold, dtype=np.float64)
+            return -np.array(d > self.distance_threshold, dtype=np.float32)
         else:
-            return -d
+            return -d.astype(np.float32)

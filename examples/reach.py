@@ -1,15 +1,14 @@
-import gym
+import gymnasium as gym
+
 import panda_gym
-import time
-env = gym.make("PandaReach-v2", render=True)
 
-obs = env.reset()
-done = False
+env = gym.make("PandaReach-v3", render_mode="human")
 
-while not done:
+observation, info = env.reset()
+
+for _ in range(1000):
     action = env.action_space.sample()
     obs, reward, done, info = env.step(action)
-    env.render(mode='human')
-    # time.sleep(4)
+    env.render()
 
 env.close()

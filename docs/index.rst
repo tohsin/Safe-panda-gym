@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to panda-gym's documentation!
-=====================================
+Welcome to ``panda-gym``'s documentation!
+=========================================
 
 .. toctree::
    :maxdepth: 1
@@ -19,6 +19,7 @@ Welcome to panda-gym's documentation!
 
    usage/environments
    usage/manual_control
+   usage/advanced_rendering
    usage/save_restore_state
    usage/train_with_sb3
 

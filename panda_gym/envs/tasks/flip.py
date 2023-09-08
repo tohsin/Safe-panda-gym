@@ -1,4 +1,4 @@
-from typing import Any, Dict, Tuple, Union
+from typing import Any, Dict, Tuple
 
 import numpy as np
 from scipy.spatial.transform import Rotation as R
@@ -24,7 +24,6 @@ class Flip(Task):
         self.obj_range_high = np.array([obj_xy_range / 2, obj_xy_range / 2, 0])
         with self.sim.no_rendering():
             self._create_scene()
-            self.sim.place_visualizer(target_position=np.zeros(3), distance=0.9, yaw=45, pitch=-30)
 
     def _create_scene(self) -> None:
         """Create the scene."""
@@ -79,13 +78,13 @@ class Flip(Task):
         object_rotation = np.zeros(3)
         return object_position, object_rotation
 
-    def is_success(self, achieved_goal: np.ndarray, desired_goal: np.ndarray) -> Union[np.ndarray, float]:
+    def is_success(self, achieved_goal: np.ndarray, desired_goal: np.ndarray) -> np.ndarray:
         d = angle_distance(achieved_goal, desired_goal)
-        return np.array(d < self.distance_threshold, dtype=np.float64)
+        return np.array(d < self.distance_threshold, dtype=bool)
 
-    def compute_reward(self, achieved_goal, desired_goal, info: Dict[str, Any]) -> Union[np.ndarray, float]:
+    def compute_reward(self, achieved_goal, desired_goal, info: Dict[str, Any]) -> np.ndarray:
         d = angle_distance(achieved_goal, desired_goal)
         if self.reward_type == "sparse":
-            return -np.array(d > self.distance_threshold, dtype=np.float64)
+            return -np.array(d > self.distance_threshold, dtype=np.float32)
         else:
-            return -d
+            return -d.astype(np.float32)

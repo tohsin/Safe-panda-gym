@@ -36,10 +36,10 @@ pip install -e .
 ## Usage
 
 ```python
-import gym
+import gymnasium as gym
 import panda_gym
 import time
-env = gym.make("PandaReachSafe-v2", render=True)
+env = gym.make("PandaReachSafe-v2", render_mode="human")
 obs_dim = env.observation_space.shape
 
 obs = env.reset()
